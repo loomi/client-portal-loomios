@@ -5,6 +5,12 @@
 applied once by a repository **admin**. After that it lives server-side and
 re-applying only updates it.
 
+> **Status: versioned but intentionally NOT active yet.** This ruleset has not
+> been applied to the repository — nothing here is being enforced. Direct
+> pushes to `main` are still allowed and the Security Gate only *reports* on
+> the CI run (it does not block merges). To turn it on, an admin must run the
+> apply step below. Until then, treat this file as a ready-to-apply draft.
+
 ## What it enforces on `main`
 
 - **No direct pushes** — changes must go through a Pull Request.
