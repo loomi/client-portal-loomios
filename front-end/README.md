@@ -1,6 +1,6 @@
-# Loomi Immersion — Front-end
+# Front-end (Local Template)
 
-Next.js 15 web app for the Loomi Immersion project. Provides authentication
+Next.js 15 web app boilerplate. Provides authentication
 (sign-up / sign-in / sign-out), account management (view, edit, delete) and a
 built-in onboarding guide for Claude Code.
 
@@ -187,7 +187,7 @@ This repo ships with first-class Claude Code support:
 
 | Command | What it does |
 |---|---|
-| `/frontend <task>` | Scaffold a new layout or implement a feature/fix/refactor following Loomi conventions |
+| `/frontend <task>` | Scaffold a new layout or implement a feature/fix/refactor following template conventions |
 | `/init` | Generate or regenerate `CLAUDE.md` from the current repo state |
 | `/review` | Multi-agent code review before opening a PR |
 | `/security-review` | Security audit of pending changes |

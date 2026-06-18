@@ -23,7 +23,7 @@ async function bootstrap(): Promise<void> {
 
   const swaggerPath = config.get('swaggerPath', { infer: true });
   const swaggerConfig = new DocumentBuilder()
-    .setTitle('Immersion Project API')
+    .setTitle('Local Template API')
     .setDescription('REST API documentation')
     .setVersion('1.0')
     .addBearerAuth()

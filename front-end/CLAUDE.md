@@ -1,4 +1,4 @@
-# loomi-product-view
+# Front-end
 
 ## Stack
 - Next.js 15 (App Router)

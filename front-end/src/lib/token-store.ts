@@ -1,7 +1,7 @@
 import type { AuthTokens } from '@/types/auth'
 
-const ACCESS_KEY = 'loomi.accessToken'
-const REFRESH_KEY = 'loomi.refreshToken'
+const ACCESS_KEY = 'app.accessToken'
+const REFRESH_KEY = 'app.refreshToken'
 
 type Listener = () => void
 const listeners = new Set<Listener>()

@@ -1,6 +1,6 @@
 # Review instructions
 
-This is a NestJS 11 + Prisma + PostgreSQL backend. `CLAUDE.md` describes the
+This is a NestJS 11 + Prisma + SQLite backend. `CLAUDE.md` describes the
 repo's conventions; treat it as authoritative project context. The rules below
 override default review behavior.
 
