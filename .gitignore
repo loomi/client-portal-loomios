@@ -26,3 +26,9 @@ dist/
 # Local DB
 *.db
 *.db-journal
+
+# Security Gate (Trivy)
+.security/
+/bin/trivy
+/bin/trivy.exe
+*.sarif

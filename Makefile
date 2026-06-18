@@ -6,6 +6,7 @@
 #   make dev-back  — back-end only
 #   make dev-front — front-end only
 #   make verify    — lint + build (back) + typecheck (front)
+#   make security  — Trivy dependency scan + descriptive report (gate)
 #   make test      — unit tests (back-end)
 #   make migrate   — Prisma migrate dev (asks for migration name)
 #   make studio    — Prisma Studio
@@ -40,7 +41,7 @@ else
   PRINT_OS  = @echo "Host OS: $(HOST_OS)"
 endif
 
-.PHONY: help setup dev dev-back dev-front verify audit test migrate studio reset clean os
+.PHONY: help setup dev dev-back dev-front verify audit security test migrate studio reset clean os
 
 help:
 	@echo "Targets:"
@@ -50,6 +51,7 @@ help:
 	@echo "  dev-front   Run front-end only"
 	@echo "  verify      Lint + build (back-end) + typecheck/lint (front-end) + npm audit"
 	@echo "  audit       npm audit (high+critical only) for both subprojects"
+	@echo "  security    Trivy dependency scan + descriptive report (gate)"
 	@echo "  test        Run back-end unit tests"
 	@echo "  migrate     Prisma migrate dev"
 	@echo "  studio      Prisma Studio (DB GUI)"
@@ -73,6 +75,9 @@ dev-front:
 
 verify:
 	$(call RUN_SH,verify)
+
+security:
+	$(call RUN_SH,security-scan)
 
 audit:
 	@echo "[audit] back-end"
