@@ -31,6 +31,31 @@ npm run lint       # eslint via next lint
 - Currency formatted with `Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' })`
 - Images via Next.js `<Image>` — always include `alt` and `sizes`
 
+## Security checklist (read before every change)
+
+The root `CLAUDE.md` carries the full normative list. Front-end specifics:
+
+- **No `dangerouslySetInnerHTML`.** Period. If a feature requires it,
+  open a discussion before writing the line — the entry must include a
+  sanitizer (DOMPurify) and a `// SECURITY:` comment with the reason.
+- **Tokens are Bearer-only.** `tokenStore` writes to `localStorage` for
+  dev simplicity; document that production deployments should move to
+  HttpOnly cookies + CSRF before going public.
+- **Never log a token, password, or user PII** — not in `console.*`, not
+  in Sentry/analytics breadcrumbs (when added), not in URL query params.
+- **External links** use `rel="noopener noreferrer"` and `target="_blank"`
+  together — `noopener` alone is enough but the pair is the de facto
+  rule.
+- **`fetch`/`useQuery` URLs come from `NEXT_PUBLIC_API_URL`** (or a typed
+  helper). Don't concatenate user input into a URL — encode it through
+  `URLSearchParams` or the `params` option.
+- **Forms always send through validated handlers.** Schema-validate the
+  payload before calling the API; treat the server as the source of
+  truth but fail fast on the client.
+- **No `eval`, no `new Function(...)`** with model/runtime data.
+- **Routing redirects:** if a `?next=` style param drives navigation,
+  validate that the target is same-origin before redirecting.
+
 ## Performance & footprint rules
 
 Read the root `CLAUDE.md` for the full list. Front-end specifics:

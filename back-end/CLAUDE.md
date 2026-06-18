@@ -9,6 +9,35 @@ A NestJS 11 + Prisma + **SQLite** + Swagger back-end scaffold. SQLite is
 deliberate: no daemons, no Docker, no hosted DB. The DB file lives at
 `prisma/dev.db`. The shape of the project is intentional — keep it.
 
+## Security checklist (read before every change)
+
+The root `CLAUDE.md` carries the full normative list. Back-end specifics:
+
+- **Every controller method handling external input uses a DTO** with
+  `class-validator` decorators. The global `ValidationPipe` is
+  `whitelist+forbidNonWhitelisted+transform` — never relax it.
+- **No `$queryRawUnsafe`.** Raw queries use `Prisma.sql` template tags so
+  bindings are parameterized. Default to typed query builders.
+- **No business code reads `process.env`** — go through `ConfigService`.
+  This keeps secrets in one place and audit-able.
+- **Auth scoping:** when a route is user-scoped, the service filters by
+  the current `userId` (from `@CurrentUser`) — not by the id in the URL
+  alone. "I trust the client's id" is a bug.
+- **Sensitive fields never leave the service:** `password`, `tokenHash`,
+  any future secret column. Return `UserEntity` (or an explicit DTO),
+  never the raw Prisma row.
+- **JWT verification path:** secret comes from `ConfigService`; the
+  `dev-only-change-me` fallback exists only so first-run dev works. Any
+  production deploy without overriding `JWT_ACCESS_SECRET` is a vuln.
+- **Bcrypt cost ≥ 10.** Use the `PASSWORD_SALT_ROUNDS` constant — don't
+  inline a literal.
+- **Refresh tokens are single-use:** when consumed, set `revokedAt` and
+  issue a new pair in the same transaction.
+- **Errors:** throw `HttpException` subclasses; do not echo user input
+  back in the message. The global filter does not strip — you must.
+- **SQLite path traversal:** `DATABASE_URL=file:...` is taken verbatim by
+  Prisma — never let user input flow into it.
+
 ## Performance & footprint rules
 
 Read the root `CLAUDE.md` for the full list. Back-end specifics:
