@@ -7,7 +7,7 @@ description: Modify the Prisma schema (`prisma/schema.prisma`) and produce/apply
 
 # prisma-change
 
-Use this skill when the user wants to change the data model. The repo uses **Prisma 6** against PostgreSQL. Migrations live in `prisma/migrations/`. The schema is `prisma/schema.prisma`. The client is regenerated into `node_modules/.prisma/client`.
+Use this skill when the user wants to change the data model. The repo uses **Prisma 6** against **SQLite** (`prisma/dev.db`). Migrations live in `prisma/migrations/`. The schema is `prisma/schema.prisma`. The client is regenerated into `node_modules/.prisma/client`. Do **not** change the Prisma `provider` away from `sqlite` — the template's zero-setup promise depends on it. SQLite quirks to remember: no native enums (Prisma emits a CHECK constraint or string), no array columns, no concurrent writers — keep transactions short.
 
 ## Workflow (the standard happy path)
 

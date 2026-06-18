@@ -179,7 +179,6 @@ This repo ships with first-class Claude Code support:
 
 - **`CLAUDE.md`** — read by Claude at the start of every session; contains
   stack, conventions, and commands.
-- **`ONBOARDING.md`** — team guide to installing and using Claude Code.
 - **`.claude/commands/frontend.md`** — the `/frontend` slash command for
   scaffolding and feature work.
 
@@ -194,6 +193,5 @@ This repo ships with first-class Claude Code support:
 
 ## Related docs
 
-- [`ONBOARDING.md`](./ONBOARDING.md) — Claude Code onboarding for the team
 - [`CLAUDE.md`](./CLAUDE.md) — project context for Claude Code
 - [`../back-end/README.md`](../back-end/README.md) — API setup

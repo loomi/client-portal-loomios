@@ -29,7 +29,7 @@ If `/docs` does not yet exist, create it the first time it's needed. Don't pre-c
 The README is for someone who just cloned the repo. Optimize for **getting the project running** and **finding out what's here**. Keep these sections, in roughly this order:
 
 1. One-paragraph project description.
-2. Stack / versions (Node, NestJS, Prisma, Postgres).
+2. Stack / versions (Node, NestJS, Prisma, SQLite).
 3. Setup: clone → `npm install` → `.env` → `npm run prisma:migrate` → `npm run start:dev`.
 4. Workflows table — npm scripts users will actually run.
 5. Project structure — short. Defer the deep version to `CLAUDE.md`.

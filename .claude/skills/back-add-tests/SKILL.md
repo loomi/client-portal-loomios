@@ -139,9 +139,9 @@ describe('Items (e2e)', () => {
 Two options, in order of preference:
 
 1. **Stub the data layer** — provide a fake `PrismaService` via `.overrideProvider(PrismaService).useValue(...)`. Fast, deterministic, no external deps. Prefer this for route-level contract tests.
-2. **Talk to a disposable Postgres** — only if the user asks for true integration coverage. Use a separate `DATABASE_URL` (via `.env.test`), run `npm run prisma:deploy` against it, wrap each test in a transaction or truncate between tests. Document the setup in `docs/testing.md`.
+2. **Talk to a throwaway SQLite file** — only if the user asks for true integration coverage. Use a separate `DATABASE_URL=file:./test.db` via `.env.test`, run `npx prisma migrate deploy` against it, wrap each test in a transaction or truncate between tests, and delete the file in `afterAll`.
 
-Do **not** point e2e tests at the dev database. Lost work has happened that way.
+Do **not** point e2e tests at the dev database (`prisma/dev.db`). Lost work has happened that way.
 
 ## Conventions
 

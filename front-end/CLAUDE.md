@@ -53,5 +53,3 @@ Read the root `CLAUDE.md` for the full list. Front-end specifics:
 ## Custom Slash Commands
 - `/frontend <task>` — two-mode frontend workflow (scaffold or feature/fix/refactor). See `.claude/commands/frontend.md`.
 
-## Onboarding
-See `ONBOARDING.md` for team guidance on using Claude Code in this repo.
