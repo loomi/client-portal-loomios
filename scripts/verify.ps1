@@ -20,4 +20,7 @@ Push-Location back-end; try { npm run build --silent } catch { Pop-Location; Fai
 Log "front-end: typecheck"
 Push-Location front-end; try { npm run typecheck --silent } catch { Pop-Location; Fail "front-end typecheck failed" }; Pop-Location
 
+Log "front-end: lint"
+Push-Location front-end; try { npm run lint --silent } catch { Pop-Location; Fail "front-end lint failed" }; Pop-Location
+
 Log "all green"

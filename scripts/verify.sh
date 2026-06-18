@@ -24,4 +24,7 @@ log "back-end: build"
 log "front-end: typecheck"
 ( cd front-end && npm run typecheck --silent ) || fail "front-end typecheck failed"
 
+log "front-end: lint"
+( cd front-end && npm run lint --silent ) || fail "front-end lint failed"
+
 log "all green"
