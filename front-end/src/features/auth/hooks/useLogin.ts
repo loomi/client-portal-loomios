@@ -12,9 +12,9 @@ export function useLogin() {
 
   return useMutation({
     mutationFn: (payload: LoginPayload) => authApi.login(payload),
-    onSuccess: async (tokens) => {
+    onSuccess: (tokens) => {
       tokenStore.set(tokens)
-      await queryClient.invalidateQueries({ queryKey: authKeys.me() })
+      queryClient.removeQueries({ queryKey: authKeys.me() })
     },
   })
 }
