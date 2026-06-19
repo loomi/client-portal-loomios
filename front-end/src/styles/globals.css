@@ -4,37 +4,39 @@
 
 @config "../../tailwind.config.ts";
 
-/* ── Loomi CSS variables ────────────────────────────────────── */
+/* ── Loomi (Light) CSS variables — design.md V.2.0 ──────────── */
 @layer base {
   :root {
-    --background:          oklch(1 0 0);
-    --foreground:          oklch(0.145 0 0);
-    --card:                oklch(1 0 0);
-    --card-foreground:     oklch(0.145 0 0);
-    --popover:             oklch(1 0 0);
-    --popover-foreground:  oklch(0.145 0 0);
-    --primary:             oklch(0.40 0.235 288);   /* #5b2dc4 */
-    --primary-foreground:  oklch(1 0 0);
-    --secondary:           oklch(0.97 0 0);
-    --secondary-foreground:oklch(0.205 0 0);
-    --muted:               oklch(0.97 0 0);
-    --muted-foreground:    oklch(0.53 0 0);
-    --accent:              oklch(0.97 0 0);
-    --accent-foreground:   oklch(0.205 0 0);
+    /* Grounds: canvas → page → surface (brightest = most elevated) */
+    --background:          #F4F4F5;                  /* canvas */
+    --foreground:          #131313;                  /* neutral ink */
+    --card:                #FFFFFF;                  /* surface */
+    --card-foreground:     #131313;
+    --popover:             #FFFFFF;
+    --popover-foreground:  #131313;
+    /* Signals */
+    --primary:             #7B3FFF;                  /* brand purple */
+    --primary-foreground:  #FFFFFF;
+    --secondary:           #FFFFFF;                  /* neutral surface button */
+    --secondary-foreground:#131313;
+    --muted:               #FAFAFA;                  /* page */
+    --muted-foreground:    rgba(19,19,19,0.6);
+    --accent:              #FAFAFA;
+    --accent-foreground:   #131313;
     --destructive:         oklch(0.577 0.245 27.325);
-    --border:              oklch(0.918 0 0);
-    --input:               oklch(0.918 0 0);
-    --ring:                oklch(0.40 0.235 288);
-    --radius:              0.75rem;
+    --border:              rgba(19,19,19,0.08);
+    --input:               rgba(19,19,19,0.12);
+    --ring:                #7B3FFF;
+    --radius:              0.75rem;                  /* 12px — card radius */
     /* Sidebar — always dark */
     --sidebar:             oklch(0.11 0 0);
     --sidebar-foreground:  oklch(0.985 0 0);
-    --sidebar-primary:     oklch(0.40 0.235 288);
+    --sidebar-primary:     #7B3FFF;
     --sidebar-primary-foreground: oklch(1 0 0);
     --sidebar-accent:      oklch(0.17 0 0);
     --sidebar-accent-foreground: oklch(0.985 0 0);
     --sidebar-border:      oklch(0.22 0 0);
-    --sidebar-ring:        oklch(0.40 0.235 288);
+    --sidebar-ring:        #7B3FFF;
   }
 
   .dark {
@@ -42,7 +44,7 @@
     --foreground:          oklch(0.985 0 0);
     --card:                oklch(0.205 0 0);
     --card-foreground:     oklch(0.985 0 0);
-    --primary:             oklch(0.40 0.235 288);
+    --primary:             #7B3FFF;
     --primary-foreground:  oklch(1 0 0);
     --secondary:           oklch(0.269 0 0);
     --secondary-foreground:oklch(0.985 0 0);
@@ -50,7 +52,7 @@
     --muted-foreground:    oklch(0.708 0 0);
     --border:              oklch(1 0 0 / 10%);
     --input:               oklch(1 0 0 / 15%);
-    --ring:                oklch(0.40 0.235 288);
+    --ring:                #7B3FFF;
   }
 
   * { border-color: var(--border); }
@@ -58,7 +60,7 @@
   html   { scroll-behavior: smooth; }
 
   body {
-    font-family: var(--font-open-sans), sans-serif;
+    font-family: var(--font-sora), sans-serif;
     background-color: var(--background);
     color: var(--foreground);
     -webkit-font-smoothing: antialiased;
@@ -66,7 +68,9 @@
   }
 
   h1, h2, h3, h4 {
-    font-family: var(--font-instrument), sans-serif;
+    font-family: var(--font-sora), sans-serif;
+    font-weight: 200;                 /* ExtraLight headlines — never bold */
+    letter-spacing: -0.025em;
   }
 
   code, pre, kbd {
@@ -74,7 +78,7 @@
   }
 
   ::selection {
-    background-color: #5b2dc4;
+    background-color: #7B3FFF;
     color: #fff;
   }
 
@@ -103,13 +107,15 @@
   --color-border:               var(--border);
   --color-input:                var(--input);
   --color-ring:                 var(--ring);
-  /* Brand */
-  --color-brand-purple: #5b2dc4;
-  --color-brand-pink:   #ff3399;
-  --color-brand-dark:   #171717;
-  /* Fonts */
-  --font-display: var(--font-instrument), sans-serif;
-  --font-body:    var(--font-open-sans), sans-serif;
+  /* Brand signals — design.md */
+  --color-brand-purple:     #7B3FFF;
+  --color-brand-pink:       #FF2D87;
+  --color-brand-lilac:      #8B3FE0;   /* text-safe lilac */
+  --color-brand-lilac-soft: #C47EFF;   /* decorative / gradient tails only */
+  --color-neutral-ink:      #131313;
+  /* Fonts — Sora is the sole typeface */
+  --font-display: var(--font-sora), sans-serif;
+  --font-body:    var(--font-sora), sans-serif;
   --font-mono:    var(--font-jetbrains), monospace;
   /* Animations */
   @keyframes fade-up {
@@ -120,6 +126,23 @@
     from { opacity: 0; }
     to   { opacity: 1; }
   }
+  /* Aurora "pensando" — três blobs derivando com bastante movimento */
+  @keyframes aurora-a {
+    0%, 100% { transform: translate(-16%, -12%) scale(1); }
+    33%      { transform: translate(14%, 8%) scale(1.35); }
+    66%      { transform: translate(-6%, 16%) scale(1.1); }
+  }
+  @keyframes aurora-b {
+    0%, 100% { transform: translate(14%, 14%) scale(1.2); }
+    50%      { transform: translate(-16%, -14%) scale(0.85); }
+  }
+  @keyframes aurora-c {
+    0%, 100% { transform: translate(2%, -16%) scale(0.9); }
+    50%      { transform: translate(-12%, 12%) scale(1.3); }
+  }
   --animate-fade-up: fade-up 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
   --animate-fade-in: fade-in 0.3s ease-out both;
+  --animate-aurora-a: aurora-a 5s ease-in-out infinite;
+  --animate-aurora-b: aurora-b 6.5s ease-in-out infinite;
+  --animate-aurora-c: aurora-c 8s ease-in-out infinite;
 }
