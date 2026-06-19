@@ -35,7 +35,8 @@ CREATE TABLE "Feedback" (
     "content" TEXT NOT NULL,
     "status" TEXT NOT NULL DEFAULT 'RECEIVED',
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL,
+    "
+    " DATETIME NOT NULL,
     CONSTRAINT "Feedback_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "Project" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT "Feedback_clientId_fkey" FOREIGN KEY ("clientId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );

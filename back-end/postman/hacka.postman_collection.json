@@ -1,0 +1,535 @@
+{
+  "info": {
+    "name": "hacka — Client Portal",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_postman_id": "hacka-loomi-client-portal",
+    "description": "Client Portal — Hacka Loomi\n\nBase URL: {{baseUrl}}\n\nFluxo principal:\n1. Auth › Login (salva accessToken automaticamente)\n2. Feedbacks › Enviar Feedback (salva feedbackId automaticamente)\n3. Triage › Executar Triagem de IA\n4. Feedbacks › Detalhe do Feedback (vê status ANALYZING + triage)\n\nTodos os requests protegidos já usam {{accessToken}} via auth da collection."
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3001/api",
+      "type": "string"
+    },
+    {
+      "key": "accessToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "refreshToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "userId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "projectId",
+      "value": "",
+      "type": "string",
+      "description": "Preencha com o ID impresso no terminal após `npx prisma db seed`"
+    },
+    {
+      "key": "feedbackId",
+      "value": "",
+      "type": "string",
+      "description": "Salvo automaticamente pelo script do POST Feedbacks › Enviar Feedback"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{accessToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": ["{{baseUrl}}"],
+              "path": ["health"]
+            },
+            "description": "Verifica se a API está no ar. Sem auth."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"success\": true,\n  \"data\": { \"status\": \"ok\", \"uptime\": 42.5 },\n  \"timestamp\": \"2026-06-19T12:00:00.000Z\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login (seed: cliente@energia.com)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.success && json.data) {",
+                  "  pm.collectionVariables.set('accessToken', json.data.accessToken);",
+                  "  pm.collectionVariables.set('refreshToken', json.data.refreshToken);",
+                  "  console.log('✔ accessToken e refreshToken salvos.');",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"cliente@energia.com\",\n  \"password\": \"Demo@1234\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Autentica com o usuário criado pelo seed.\n\nCredenciais do seed:\n- email: cliente@energia.com\n- password: Demo@1234\n\nO script salva accessToken e refreshToken automaticamente."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"accessToken\": \"eyJ...\",\n    \"refreshToken\": \"opaque-token\"\n  },\n  \"timestamp\": \"2026-06-19T12:00:00.000Z\"\n}"
+            },
+            {
+              "name": "401 Credenciais inválidas",
+              "status": "Unauthorized",
+              "code": 401,
+              "body": "{\n  \"statusCode\": 401,\n  \"error\": \"UnauthorizedException\",\n  \"message\": \"Credenciais inválidas\",\n  \"path\": \"/api/auth/login\",\n  \"timestamp\": \"2026-06-19T12:00:00.000Z\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Me (usuário autenticado)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "me"]
+            },
+            "description": "Retorna os dados do usuário autenticado. Use para confirmar que o token está válido."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"id\": \"<userId>\",\n    \"email\": \"cliente@energia.com\",\n    \"name\": \"Ana Souza\"\n  },\n  \"timestamp\": \"2026-06-19T12:00:00.000Z\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Refresh Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.success && json.data) {",
+                  "  pm.collectionVariables.set('accessToken', json.data.accessToken);",
+                  "  pm.collectionVariables.set('refreshToken', json.data.refreshToken);",
+                  "  console.log('✔ Tokens renovados.');",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/refresh-token",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "refresh-token"]
+            },
+            "description": "Gera novo par de tokens. O refresh token anterior é revogado (uso único)."
+          }
+        },
+        {
+          "name": "Logout",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 204) {",
+                  "  pm.collectionVariables.set('accessToken', '');",
+                  "  pm.collectionVariables.set('refreshToken', '');",
+                  "  console.log('✔ Tokens limpos.');",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"refreshToken\": \"{{refreshToken}}\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "logout"]
+            },
+            "description": "Revoga o refresh token. Retorna 204."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Criar usuário",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.success && json.data && json.data.id) {",
+                  "  pm.collectionVariables.set('userId', json.data.id);",
+                  "  console.log('✔ userId salvo: ' + json.data.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"novo@exemplo.com\",\n  \"password\": \"senha1234\",\n  \"name\": \"Novo Usuário\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["users"]
+            }
+          }
+        },
+        {
+          "name": "Listar usuários",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["users"]
+            }
+          }
+        },
+        {
+          "name": "Buscar usuário por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "{{userId}}"]
+            }
+          }
+        },
+        {
+          "name": "Atualizar usuário",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Nome Atualizado\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/users/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "{{userId}}"]
+            }
+          }
+        },
+        {
+          "name": "Deletar usuário",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/users/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["users", "{{userId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Feedbacks",
+      "description": "Pré-requisito: {{projectId}} preenchido com o ID do seed.\n\nO POST salva {{feedbackId}} automaticamente.",
+      "item": [
+        {
+          "name": "Enviar Feedback",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.success && json.data && json.data.id) {",
+                  "  pm.collectionVariables.set('feedbackId', json.data.id);",
+                  "  console.log('✔ feedbackId salvo: ' + json.data.id);",
+                  "  console.log('Status inicial: ' + json.data.status);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"Gostaria que o dashboard mostrasse o consumo comparado ao mês anterior, facilitaria muito a análise executiva\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/projects/{{projectId}}/feedbacks",
+              "host": ["{{baseUrl}}"],
+              "path": ["projects", "{{projectId}}", "feedbacks"]
+            },
+            "description": "Envia feedback em texto livre para o projeto.\n\nStatus inicial: RECEIVED\nO script salva o id em {{feedbackId}} para uso nos próximos requests.\n\nPayloads de teste (troque o content):\n• feature/MEDIUM: \"Gostaria que o dashboard mostrasse o consumo comparado ao mês anterior\"\n• bug/CRITICAL:   \"O sistema está crashando ao exportar o relatório, bloqueando o fechamento mensal\"\n• design/MEDIUM:  \"O botão de alertas está desalinhado no mobile, sobreposto ao menu lateral\"\n• bug/HIGH:       \"Os dados do relatório PDF estão incorretos, prejudicando a análise\"\n• question/MEDIUM:\"Quando será entregue a função de comparativo histórico de medições?\"\n• bug/CRITICAL:   \"O portal fora do ar desde ontem, impossível acessar o painel\"\n• feature/LOW:    \"Seria interessante ter exportação de dados em Excel quando puder\"\n• design/HIGH:    \"A interface não está responsiva, o layout quebra completamente no mobile\""
+          },
+          "response": [
+            {
+              "name": "201 Created — feature/MEDIUM",
+              "status": "Created",
+              "code": 201,
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"id\": \"<feedbackId>\",\n    \"projectId\": \"{{projectId}}\",\n    \"clientId\": \"<userId>\",\n    \"content\": \"Gostaria que o dashboard...\",\n    \"status\": \"RECEIVED\",\n    \"triage\": null,\n    \"ticket\": null,\n    \"createdAt\": \"2026-06-19T12:00:00.000Z\",\n    \"updatedAt\": \"2026-06-19T12:00:00.000Z\"\n  },\n  \"timestamp\": \"2026-06-19T12:00:00.000Z\"\n}"
+            },
+            {
+              "name": "400 Conteúdo muito curto",
+              "status": "Bad Request",
+              "code": 400,
+              "body": "{\n  \"statusCode\": 400,\n  \"error\": \"BadRequestException\",\n  \"message\": [\"content must be longer than or equal to 10 characters\"],\n  \"path\": \"/api/projects/.../feedbacks\",\n  \"timestamp\": \"2026-06-19T12:00:00.000Z\"\n}"
+            },
+            {
+              "name": "404 Projeto não encontrado / sem acesso",
+              "status": "Not Found",
+              "code": 404,
+              "body": "{\n  \"statusCode\": 404,\n  \"error\": \"NotFoundException\",\n  \"message\": \"Projeto não encontrado\",\n  \"path\": \"/api/projects/.../feedbacks\",\n  \"timestamp\": \"2026-06-19T12:00:00.000Z\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Listar Feedbacks do Projeto",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/projects/{{projectId}}/feedbacks",
+              "host": ["{{baseUrl}}"],
+              "path": ["projects", "{{projectId}}", "feedbacks"],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "ANALYZING",
+                  "description": "RECEIVED | ANALYZING | APPROVED | REJECTED | RESOLVED",
+                  "disabled": true
+                },
+                {
+                  "key": "page",
+                  "value": "1",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Lista feedbacks do projeto com paginação.\n\nFiltros opcionais (desabilitados por padrão — habilite conforme precisar):\n• ?status=ANALYZING  → só os que já foram triados\n• ?status=RECEIVED   → ainda não triados\n• ?page=1&limit=20"
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"data\": [\n      {\n        \"id\": \"<feedbackId>\",\n        \"status\": \"ANALYZING\",\n        \"content\": \"Gostaria que o dashboard...\",\n        \"triage\": {\n          \"category\": \"feature\",\n          \"urgency\": \"MEDIUM\",\n          \"priority\": 3,\n          \"suggestedOwner\": \"po\",\n          \"matchedTaskId\": \"<taskId ou null>\",\n          \"triageReason\": \"...\"\n        },\n        \"ticket\": null\n      }\n    ],\n    \"total\": 1,\n    \"page\": 1,\n    \"limit\": 20\n  },\n  \"timestamp\": \"2026-06-19T12:00:00.000Z\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Detalhe do Feedback",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/projects/{{projectId}}/feedbacks/{{feedbackId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["projects", "{{projectId}}", "feedbacks", "{{feedbackId}}"]
+            },
+            "description": "Retorna o feedback completo com triagem e ticket aninhados.\n\nUse após o POST Triage para confirmar que status mudou para ANALYZING."
+          },
+          "response": [
+            {
+              "name": "200 OK — após triagem",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"id\": \"<feedbackId>\",\n    \"status\": \"ANALYZING\",\n    \"content\": \"Gostaria que o dashboard...\",\n    \"triage\": {\n      \"category\": \"feature\",\n      \"urgency\": \"MEDIUM\",\n      \"priority\": 3,\n      \"suggestedOwner\": \"po\",\n      \"matchedTaskId\": \"<taskId>\",\n      \"triageReason\": \"Feedback identificado como solicitação de nova funcionalidade com urgência moderada. Roteado para o Product Owner. Correspondência encontrada com a task \\\"Dashboard de consumo em tempo real\\\".\"\n    },\n    \"ticket\": null\n  },\n  \"timestamp\": \"2026-06-19T12:00:00.000Z\"\n}"
+            },
+            {
+              "name": "403 Feedback de outro usuário",
+              "status": "Forbidden",
+              "code": 403,
+              "body": "{\n  \"statusCode\": 403,\n  \"error\": \"ForbiddenException\",\n  \"message\": \"Acesso negado\",\n  \"path\": \"/api/projects/.../feedbacks/...\",\n  \"timestamp\": \"2026-06-19T12:00:00.000Z\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Triage (IA)",
+      "description": "Pré-requisito: {{feedbackId}} salvo pelo POST Feedbacks › Enviar Feedback.\n\nO POST não tem body — a IA lê o conteúdo do feedback e as tasks do projeto automaticamente.",
+      "item": [
+        {
+          "name": "Executar Triagem de IA",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.success && json.data) {",
+                  "  const d = json.data;",
+                  "  console.log('✔ Triagem concluída');",
+                  "  console.log('  category: '      + d.category);",
+                  "  console.log('  urgency: '       + d.urgency);",
+                  "  console.log('  priority: '      + d.priority);",
+                  "  console.log('  suggestedOwner: '+ d.suggestedOwner);",
+                  "  console.log('  matchedTaskId: ' + d.matchedTaskId);",
+                  "  console.log('  reason: '        + d.triageReason);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/feedbacks/{{feedbackId}}/triage",
+              "host": ["{{baseUrl}}"],
+              "path": ["feedbacks", "{{feedbackId}}", "triage"]
+            },
+            "description": "Executa a triagem de IA no feedback.\n\nSem body. A IA usa o conteúdo do feedback + tasks do projeto.\n\nRetorna:\n• category: bug | feature | design | question\n• urgency: LOW | MEDIUM | HIGH | CRITICAL\n• priority: 1 (mais urgente) → 5 (menor prioridade)\n• suggestedOwner: developer | po | designer | pm\n• matchedTaskId: UUID da task com maior sobreposição semântica, ou null\n• triageReason: explicação em linguagem natural\n\nEfeito colateral: status do feedback muda de RECEIVED → ANALYZING."
+          },
+          "response": [
+            {
+              "name": "201 Created — feature/MEDIUM com match",
+              "status": "Created",
+              "code": 201,
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"id\": \"<triageId>\",\n    \"feedbackId\": \"<feedbackId>\",\n    \"category\": \"feature\",\n    \"urgency\": \"MEDIUM\",\n    \"priority\": 3,\n    \"suggestedOwner\": \"po\",\n    \"matchedTaskId\": \"<taskId — Dashboard de consumo em tempo real>\",\n    \"triageReason\": \"Feedback identificado como solicitação de nova funcionalidade com urgência moderada. Roteado para o Product Owner. Correspondência encontrada com a task \\\"Dashboard de consumo em tempo real\\\" — recomenda-se vincular ao invés de abrir uma nova task.\",\n    \"createdAt\": \"2026-06-19T12:00:00.000Z\"\n  },\n  \"timestamp\": \"2026-06-19T12:00:00.000Z\"\n}"
+            },
+            {
+              "name": "201 Created — bug/CRITICAL",
+              "status": "Created",
+              "code": 201,
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"id\": \"<triageId>\",\n    \"feedbackId\": \"<feedbackId>\",\n    \"category\": \"bug\",\n    \"urgency\": \"CRITICAL\",\n    \"priority\": 1,\n    \"suggestedOwner\": \"developer\",\n    \"matchedTaskId\": null,\n    \"triageReason\": \"Feedback identificado como falha ou bug com urgência crítica. Roteado para o time de desenvolvimento. Nenhuma task existente com correspondência relevante foi encontrada; uma nova task poderá ser criada após aprovação.\",\n    \"createdAt\": \"2026-06-19T12:00:00.000Z\"\n  },\n  \"timestamp\": \"2026-06-19T12:00:00.000Z\"\n}"
+            },
+            {
+              "name": "409 Feedback já triado",
+              "status": "Conflict",
+              "code": 409,
+              "body": "{\n  \"statusCode\": 409,\n  \"error\": \"ConflictException\",\n  \"message\": \"Este feedback já foi triado. Consulte o resultado existente.\",\n  \"path\": \"/api/feedbacks/.../triage\",\n  \"timestamp\": \"2026-06-19T12:00:00.000Z\"\n}"
+            },
+            {
+              "name": "404 Feedback não encontrado",
+              "status": "Not Found",
+              "code": 404,
+              "body": "{\n  \"statusCode\": 404,\n  \"error\": \"NotFoundException\",\n  \"message\": \"Feedback não encontrado\",\n  \"path\": \"/api/feedbacks/.../triage\",\n  \"timestamp\": \"2026-06-19T12:00:00.000Z\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Consultar Resultado da Triagem",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/feedbacks/{{feedbackId}}/triage",
+              "host": ["{{baseUrl}}"],
+              "path": ["feedbacks", "{{feedbackId}}", "triage"]
+            },
+            "description": "Consulta o resultado de uma triagem já executada.\n\nRetorna 404 se o POST /triage ainda não foi chamado para este feedback."
+          },
+          "response": [
+            {
+              "name": "200 OK",
+              "status": "OK",
+              "code": 200,
+              "body": "{\n  \"success\": true,\n  \"data\": {\n    \"id\": \"<triageId>\",\n    \"feedbackId\": \"<feedbackId>\",\n    \"category\": \"feature\",\n    \"urgency\": \"MEDIUM\",\n    \"priority\": 3,\n    \"suggestedOwner\": \"po\",\n    \"matchedTaskId\": \"<taskId ou null>\",\n    \"triageReason\": \"...\",\n    \"createdAt\": \"2026-06-19T12:00:00.000Z\"\n  },\n  \"timestamp\": \"2026-06-19T12:00:00.000Z\"\n}"
+            },
+            {
+              "name": "404 Triagem não existe ainda",
+              "status": "Not Found",
+              "code": 404,
+              "body": "{\n  \"statusCode\": 404,\n  \"error\": \"NotFoundException\",\n  \"message\": \"Triagem não encontrada para este feedback. Execute POST /triage primeiro.\",\n  \"path\": \"/api/feedbacks/.../triage\",\n  \"timestamp\": \"2026-06-19T12:00:00.000Z\"\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

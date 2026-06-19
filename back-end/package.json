@@ -9,6 +9,9 @@
     "multer": "^2.2.0",
     "js-yaml": "^4.2.0"
   },
+  "prisma": {
+    "seed": "ts-node --project tsconfig.seed.json prisma/seed.ts"
+  },
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",

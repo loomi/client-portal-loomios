@@ -9,6 +9,8 @@ import { PrismaModule } from './prisma/prisma.module';
 import { HealthModule } from './modules/health/health.module';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { FeedbacksModule } from './modules/feedbacks/feedbacks.module';
+import { TriageModule } from './modules/triage/triage.module';
 
 @Module({
   imports: [
@@ -20,6 +22,8 @@ import { AuthModule } from './modules/auth/auth.module';
     HealthModule,
     UsersModule,
     AuthModule,
+    FeedbacksModule,
+    TriageModule,
   ],
   providers: [
     { provide: APP_FILTER, useClass: AllExceptionsFilter },
