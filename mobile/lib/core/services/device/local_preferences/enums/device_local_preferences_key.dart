@@ -1,0 +1,1 @@
+enum DeviceLocalPreferencesKey { appTheme }

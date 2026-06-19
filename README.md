@@ -1,6 +1,6 @@
-# Claude Code Local Project Template
+# Client Portal Loomios
 
-Fullstack monorepo template **100% local** — sem Postgres, sem Docker, sem
+Fullstack monorepo **100% local** — sem Postgres, sem Docker, sem
 serviços hospedados. Roda em laptops modestos. Pensado para *vibe-coding*
 com [Claude Code](https://claude.com/claude-code): um único `make setup`
 deixa back-end e front-end prontos.

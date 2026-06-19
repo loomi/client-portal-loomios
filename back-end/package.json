@@ -1,7 +1,7 @@
 {
-  "name": "back-end",
+  "name": "client-portal-loomios-back-end",
   "version": "0.0.1",
-  "description": "",
+  "description": "Client Portal Loomios — NestJS 11 + Prisma + SQLite back-end",
   "author": "",
   "private": true,
   "license": "UNLICENSED",

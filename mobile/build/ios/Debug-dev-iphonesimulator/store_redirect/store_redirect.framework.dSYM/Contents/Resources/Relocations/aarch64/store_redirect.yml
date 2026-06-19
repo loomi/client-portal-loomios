@@ -1,0 +1,13 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/italodias/Documents/loomios/client-portal-loomios/mobile/build/ios/Debug-dev-iphonesimulator/store_redirect/store_redirect.framework/store_redirect'
+relocations:
+  - { offset: 0x1A93D, size: 0x8, addend: 0x0, symName: _store_redirectVersionString, symObjAddr: 0x0, symBinAddr: 0x13C8, symSize: 0x0 }
+  - { offset: 0x1A971, size: 0x8, addend: 0x0, symName: _store_redirectVersionNumber, symObjAddr: 0x30, symBinAddr: 0x13F8, symSize: 0x0 }
+  - { offset: 0x1A9AD, size: 0x8, addend: 0x0, symName: '+[StoreRedirectPlugin registerWithRegistrar:]', symObjAddr: 0x0, symBinAddr: 0xB40, symSize: 0xA0 }
+  - { offset: 0x1A9CA, size: 0x8, addend: 0x0, symName: '+[StoreRedirectPlugin registerWithRegistrar:]', symObjAddr: 0x0, symBinAddr: 0xB40, symSize: 0xA0 }
+  - { offset: 0x1AA23, size: 0x8, addend: 0x0, symName: '-[StoreRedirectPlugin handleMethodCall:result:]', symObjAddr: 0xA0, symBinAddr: 0xBE0, symSize: 0x258 }
+  - { offset: 0x1AAC9, size: 0x8, addend: 0x0, symName: '___47-[StoreRedirectPlugin handleMethodCall:result:]_block_invoke', symObjAddr: 0x2F8, symBinAddr: 0xE38, symSize: 0x78 }
+  - { offset: 0x1AB39, size: 0x8, addend: 0x0, symName: ___copy_helper_block_e8_32b, symObjAddr: 0x370, symBinAddr: 0xEB0, symSize: 0x10 }
+  - { offset: 0x1AB5F, size: 0x8, addend: 0x0, symName: ___destroy_helper_block_e8_32s, symObjAddr: 0x380, symBinAddr: 0xEC0, symSize: 0x8 }
+...

@@ -1,0 +1,1 @@
+ /Users/italodias/Documents/loomios/client-portal-loomios/mobile/.dart_tool/flutter_build/6203f7ed75926a77d948d51148046301/native_assets.json: 
