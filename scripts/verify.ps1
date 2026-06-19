@@ -1,4 +1,4 @@
-# End-of-turn verification for Windows.
+﻿# End-of-turn verification for Windows.
 $ErrorActionPreference = 'Stop'
 $RepoRoot = Split-Path -Parent $PSScriptRoot
 Set-Location $RepoRoot

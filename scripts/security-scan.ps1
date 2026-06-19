@@ -1,4 +1,4 @@
-# Security Gate — scans back-end and front-end dependencies with Trivy and
+﻿# Security Gate — scans back-end and front-end dependencies with Trivy and
 # reports, per vulnerable library, the version to bump to in package.json.
 # Windows counterpart of security-scan.sh. Never installs anything system-wide.
 #

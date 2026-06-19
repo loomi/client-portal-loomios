@@ -1,4 +1,4 @@
-# Windows bootstrap. Idempotent — re-run anytime.
+﻿# Windows bootstrap. Idempotent — re-run anytime.
 #
 # Ensures Node 20+ and npm are present (installs via winget if not),
 # then installs deps for back-end and front-end, copies .env files,
