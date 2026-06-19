@@ -9,7 +9,7 @@ import { tokenStore } from '@/lib/token-store'
 
 export function RequireAuth({ children }: { children: React.ReactNode }) {
   const router = useRouter()
-  const { data, isLoading, isError } = useCurrentUser()
+  const { data, isLoading, isError, isFetching } = useCurrentUser()
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -19,8 +19,11 @@ export function RequireAuth({ children }: { children: React.ReactNode }) {
   }, [router])
 
   useEffect(() => {
-    if (isError) router.replace('/login')
-  }, [isError, router])
+    if (isError && !isFetching) {
+      tokenStore.clear()
+      router.replace('/login')
+    }
+  }, [isError, isFetching, router])
 
   if (!data) {
     return (
