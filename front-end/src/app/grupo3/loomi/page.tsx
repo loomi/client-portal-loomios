@@ -49,7 +49,7 @@ function ClientCard({
       <div className="mt-4 flex items-center justify-between border-t border-border pt-4">
         <p className="loomi-body-sm text-muted-foreground">{PROFILE_HINT[value]}</p>
         {client.featured && (
-          <Button variant="link" render={<Link href="/portal" />}>
+          <Button variant="link" render={<Link href="/grupo3/portal" />}>
             Ver portal do cliente
             <ArrowRight className="size-4" />
           </Button>

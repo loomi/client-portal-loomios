@@ -15,13 +15,13 @@ export default function Grupo3Layout({ children }: { children: React.ReactNode }
             </div>
             <div className="flex items-center gap-1">
               <Link
-                href="/loomi"
+                href="/grupo3/loomi"
                 className="loomi-label rounded-full px-4 py-2 text-foreground/55 transition-colors hover:text-foreground"
               >
                 Painel Loomi
               </Link>
               <Link
-                href="/portal"
+                href="/grupo3/portal"
                 className="loomi-label rounded-full px-4 py-2 text-foreground/55 transition-colors hover:text-foreground"
               >
                 Portal do cliente
