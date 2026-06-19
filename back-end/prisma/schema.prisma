@@ -24,6 +24,104 @@ model User {
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   refreshTokens RefreshToken[]
+  projects      Project[]
+  feedbacks     Feedback[]
+}
+
+// ─── Portal entities ──────────────────────────────────────────────────────────
+
+model Project {
+  id        String     @id @default(uuid())
+  name      String
+  sector    String
+  clientId  String
+  client    User       @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  // "discovery" | "design" | "build" | "launch"
+  phase     String
+  // "GREEN" | "ATTENTION" | "BLOCKER"
+  health    String     @default("GREEN")
+  startDate DateTime?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  tasks     Task[]
+  feedbacks Feedback[]
+
+  @@index([clientId])
+}
+
+model Task {
+  id          String           @id @default(uuid())
+  projectId   String
+  project     Project          @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  title       String
+  description String?
+  // "design" | "feature" | "bug" | "fix"
+  type        String
+  // "TODO" | "IN_PROGRESS" | "DONE"
+  status      String           @default("TODO")
+  // "designer" | "po" | "developer" | "pm"
+  assignedTo  String?
+  priority    Int              @default(3)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+  triages     FeedbackTriage[]
+  tickets     Ticket[]
+
+  @@index([projectId])
+  @@index([projectId, status])
+}
+
+model Feedback {
+  id        String          @id @default(uuid())
+  projectId String
+  project   Project         @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  clientId  String
+  client    User            @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  content   String
+  // "RECEIVED" | "ANALYZING" | "APPROVED" | "REJECTED" | "RESOLVED"
+  status    String          @default("RECEIVED")
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  triage    FeedbackTriage?
+  ticket    Ticket?
+
+  @@index([projectId])
+  @@index([clientId])
+}
+
+model FeedbackTriage {
+  id             String   @id @default(uuid())
+  feedbackId     String   @unique
+  feedback       Feedback @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
+  // "bug" | "feature" | "design" | "question"
+  category       String
+  // "LOW" | "MEDIUM" | "HIGH" | "CRITICAL"
+  urgency        String
+  priority       Int
+  // "designer" | "po" | "developer" | "pm"
+  suggestedOwner String
+  matchedTaskId  String?
+  matchedTask    Task?    @relation(fields: [matchedTaskId], references: [id], onDelete: SetNull)
+  triageReason   String
+  createdAt      DateTime @default(now())
+
+  @@index([matchedTaskId])
+}
+
+model Ticket {
+  id         String   @id @default(uuid())
+  feedbackId String   @unique
+  feedback   Feedback @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
+  taskId     String
+  task       Task     @relation(fields: [taskId], references: [id], onDelete: Restrict)
+  // "APPROVED" | "REJECTED"
+  decision   String
+  reason     String?
+  decidedBy  String
+  decidedAt  DateTime @default(now())
+  createdAt  DateTime @default(now())
+
+  @@index([taskId])
 }
 
 model RefreshToken {
