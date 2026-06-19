@@ -1,6 +1,6 @@
 # Front-end Makefile. Thin wrappers around npm scripts.
 
-.PHONY: help install dev build start lint typecheck
+.PHONY: help install dev build start lint typecheck verify
 
 help:
 	@echo "Front-end targets:"
@@ -10,6 +10,7 @@ help:
 	@echo "  start       npm run start"
 	@echo "  lint        npm run lint"
 	@echo "  typecheck   npm run typecheck"
+	@echo "  verify      delegate to root 'make verify' (full monorepo gate)"
 
 install:   ; npm install --no-audit --no-fund --prefer-offline
 dev:       ; npm run dev
@@ -17,3 +18,5 @@ build:     ; npm run build
 start:     ; npm run start
 lint:      ; npm run lint
 typecheck: ; npm run typecheck
+# Delegate to the root so the Stop hook's `make verify` works from any cwd.
+verify:    ; $(MAKE) -C .. verify

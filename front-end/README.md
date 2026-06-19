@@ -16,6 +16,38 @@ The app talks to the [NestJS back-end](../back-end) for user and auth APIs.
 | `/account` | View, edit and delete the current user. Hosts the sign-out action. Protected — redirects to `/login` if unauthenticated. |
 | `/claude-guide` | Embedded onboarding guide for Claude Code |
 | `/claude-guide/setup` … `/claude-guide/checklist` | Subsections of the guide |
+| `/portal` | **Client Portal — Home executiva** (jornada visível + health + métricas). Wireframe do hacka, Grupo 1 · Experiência. Pública, sem login. |
+
+## Client Portal — Home executiva (Grupo 1 · Experiência)
+
+Wireframe da **visão executiva** do Client Portal: o cliente abre e entende a
+**jornada**, a **saúde** e as **métricas-chave** do projeto em segundos, na
+linguagem do negócio dele (sem jargão). Projeto-exemplo do Golden Path: cliente
+do setor de **energia** (Volt Energia).
+
+O que a tela demonstra:
+
+- **Health do projeto** em 3 estados — `verde` (no ritmo) · `atenção` ·
+  `impeditivo` (bloqueio) — com uma frase honesta de status e o único ponto que
+  depende do cliente em destaque.
+- **Jornada visível** — etapas, materiais entregues e próximos passos numa
+  timeline única, cada etapa com sua própria saúde.
+- **Métricas-chave** — progresso, etapas concluídas, próxima entrega e
+  conclusão prevista.
+
+### Como visualizar
+
+```bash
+# a partir de front-end/
+npm install        # se ainda não instalou as dependências
+npm run dev        # sobe o servidor em http://localhost:3000
+```
+
+Abra **[http://localhost:3000/portal](http://localhost:3000/portal)**.
+
+> Esta rota é **pública** (fora do grupo autenticado `(app)`) e usa **dados de
+> exemplo** (`src/features/portal/data.ts`) — não precisa de back-end nem login
+> para a demo. O código vive em `src/features/portal/`.
 
 ## Stack
 

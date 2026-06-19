@@ -1,7 +1,7 @@
 # Back-end Makefile. Thin wrappers around npm scripts so the workflow is
 # discoverable and identical across operating systems.
 
-.PHONY: help install dev build start lint test test-e2e migrate deploy generate studio reset
+.PHONY: help install dev build start lint test test-e2e migrate deploy generate studio reset verify
 
 help:
 	@echo "Back-end targets:"
@@ -17,6 +17,7 @@ help:
 	@echo "  generate    prisma generate"
 	@echo "  studio      prisma studio"
 	@echo "  reset       prisma migrate reset"
+	@echo "  verify      delegate to root 'make verify' (full monorepo gate)"
 
 install:   ; npm install --no-audit --no-fund --prefer-offline
 dev:       ; npm run start:dev
@@ -30,3 +31,5 @@ deploy:    ; npx prisma migrate deploy
 generate:  ; npx prisma generate
 studio:    ; npx prisma studio
 reset:     ; npx prisma migrate reset --force
+# Delegate to the root so the Stop hook's `make verify` works from any cwd.
+verify:    ; $(MAKE) -C .. verify

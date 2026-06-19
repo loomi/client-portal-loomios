@@ -67,7 +67,7 @@ com Next.js, Tailwind e React Query`}</CodeBlock>
 
         <Card className="ring-0 border-border">
           <CardHeader>
-            <Badge variant="secondary" className="mb-1 w-fit text-xs font-mono">
+            <Badge variant="neutral" className="mb-1 w-fit text-xs font-mono">
               MODO 2
             </Badge>
             <CardTitle className="text-lg font-bold">Feature / Correção / Refatoração</CardTitle>
