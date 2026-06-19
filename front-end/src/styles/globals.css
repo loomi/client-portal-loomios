@@ -4,69 +4,78 @@
 
 @config "../../tailwind.config.ts";
 
-/* ── Loomi CSS variables ────────────────────────────────────── */
+/* ════════════════════════════════════════════════════════════════
+   LOOMI DESIGN SYSTEM — light-first (design.md, V.2.0)
+   Single source of truth for the team. Build screens on these tokens,
+   never hardcode hex values. See /design-system for the live preview.
+   ════════════════════════════════════════════════════════════════ */
+
 @layer base {
   :root {
-    --background:          oklch(1 0 0);
-    --foreground:          oklch(0.145 0 0);
-    --card:                oklch(1 0 0);
-    --card-foreground:     oklch(0.145 0 0);
-    --popover:             oklch(1 0 0);
-    --popover-foreground:  oklch(0.145 0 0);
-    --primary:             oklch(0.40 0.235 288);   /* #5b2dc4 */
-    --primary-foreground:  oklch(1 0 0);
-    --secondary:           oklch(0.97 0 0);
-    --secondary-foreground:oklch(0.205 0 0);
-    --muted:               oklch(0.97 0 0);
-    --muted-foreground:    oklch(0.53 0 0);
-    --accent:              oklch(0.97 0 0);
-    --accent-foreground:   oklch(0.205 0 0);
-    --destructive:         oklch(0.577 0.245 27.325);
-    --border:              oklch(0.918 0 0);
-    --input:               oklch(0.918 0 0);
-    --ring:                oklch(0.40 0.235 288);
-    --radius:              0.75rem;
-    /* Sidebar — always dark */
-    --sidebar:             oklch(0.11 0 0);
-    --sidebar-foreground:  oklch(0.985 0 0);
-    --sidebar-primary:     oklch(0.40 0.235 288);
-    --sidebar-primary-foreground: oklch(1 0 0);
-    --sidebar-accent:      oklch(0.17 0 0);
-    --sidebar-accent-foreground: oklch(0.985 0 0);
-    --sidebar-border:      oklch(0.22 0 0);
-    --sidebar-ring:        oklch(0.40 0.235 288);
-  }
+    /* ── Grounds (light → lighter; brightest = most elevated) ── */
+    --background:          #F4F4F5;            /* canvas — page base */
+    --foreground:          #131313;            /* neutral — primary text */
+    --card:                #FFFFFF;            /* surface — elevated */
+    --card-foreground:     #131313;
+    --popover:             #FFFFFF;
+    --popover-foreground:  #131313;
 
-  .dark {
-    --background:          oklch(0.145 0 0);
-    --foreground:          oklch(0.985 0 0);
-    --card:                oklch(0.205 0 0);
-    --card-foreground:     oklch(0.985 0 0);
-    --primary:             oklch(0.40 0.235 288);
-    --primary-foreground:  oklch(1 0 0);
-    --secondary:           oklch(0.269 0 0);
-    --secondary-foreground:oklch(0.985 0 0);
-    --muted:               oklch(0.269 0 0);
-    --muted-foreground:    oklch(0.708 0 0);
-    --border:              oklch(1 0 0 / 10%);
-    --input:               oklch(1 0 0 / 15%);
-    --ring:                oklch(0.40 0.235 288);
+    /* ── Brand signal: purple is the interactive hue ── */
+    --primary:             #7B3FFF;
+    --primary-foreground:  #FFFFFF;
+
+    /* ── Neutral system (shadcn semantics) ── */
+    --secondary:           #ECECEE;            /* subtle neutral fill */
+    --secondary-foreground:#131313;
+    --muted:               #FAFAFA;            /* page — one step brighter than canvas */
+    --muted-foreground:    rgba(19, 19, 19, 0.6);
+    --accent:              #F1EAFF;            /* faint purple tint for hover/subtle bg */
+    --accent-foreground:   #5A23C8;
+    --destructive:         #E5484D;            /* error / impeditivo */
+    --destructive-foreground: #FFFFFF;
+
+    /* ── Lines & focus ── */
+    --border:              rgba(19, 19, 19, 0.08);
+    --input:               rgba(19, 19, 19, 0.12);
+    --ring:                #7B3FFF;
+
+    /* ── Radius scale (design.md) ── */
+    --radius:              0.75rem;            /* 12px — default (cards) */
+    --radius-sm:           4px;
+    --radius-md:           8px;
+    --radius-lg:           12px;
+    --radius-xl:           16px;
+    --radius-pill:         100px;
+
+    /* ── Sidebar — Loomi "Black" register (on-brand dark) ── */
+    --sidebar:             #131313;
+    --sidebar-foreground:  #FAFAFA;
+    --sidebar-primary:     #7B3FFF;
+    --sidebar-primary-foreground: #FFFFFF;
+    --sidebar-accent:      #1E1E1E;
+    --sidebar-accent-foreground: #FAFAFA;
+    --sidebar-border:      rgba(255, 255, 255, 0.08);
+    --sidebar-ring:        #7B3FFF;
   }
 
   * { border-color: var(--border); }
 
-  html   { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; }
 
   body {
-    font-family: var(--font-open-sans), sans-serif;
+    font-family: var(--font-sora), sans-serif;
     background-color: var(--background);
     color: var(--foreground);
+    font-weight: 300;                          /* Light is the default prose weight */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
+  /* Headlines are large and quiet — ExtraLight/Light, never bold. */
   h1, h2, h3, h4 {
-    font-family: var(--font-instrument), sans-serif;
+    font-family: var(--font-sora), sans-serif;
+    font-weight: 200;
+    letter-spacing: -0.025em;
   }
 
   code, pre, kbd {
@@ -74,16 +83,60 @@
   }
 
   ::selection {
-    background-color: #5b2dc4;
+    background-color: #7B3FFF;
     color: #fff;
   }
 
-  aside::-webkit-scrollbar         { width: 3px; }
-  aside::-webkit-scrollbar-track   { background: transparent; }
-  aside::-webkit-scrollbar-thumb   { border-radius: 9999px; background: oklch(0.30 0 0); }
+  aside::-webkit-scrollbar       { width: 3px; }
+  aside::-webkit-scrollbar-track { background: transparent; }
+  aside::-webkit-scrollbar-thumb { border-radius: 9999px; background: rgba(255, 255, 255, 0.2); }
 }
 
-/* ── Tailwind v4 theme — maps CSS vars to utilities ─────────── */
+/* ── Typography helpers ─────────────────────────────────────────
+   Semantic type styles from design.md. Apply directly:
+   <h1 className="loomi-h1">…</h1>   <span className="loomi-label">…</span>
+   ──────────────────────────────────────────────────────────────── */
+@layer components {
+  .loomi-display {
+    font-family: var(--font-sora), sans-serif;
+    font-size: clamp(3rem, 8vw, 6.5rem); font-weight: 200;
+    line-height: 0.9; letter-spacing: -0.04em;
+  }
+  .loomi-h1 {
+    font-family: var(--font-sora), sans-serif;
+    font-size: clamp(2.25rem, 5vw, 3.5rem); font-weight: 200;
+    line-height: 1; letter-spacing: -0.03em;
+  }
+  .loomi-h2 {
+    font-family: var(--font-sora), sans-serif;
+    font-size: clamp(1.75rem, 3.5vw, 2.5rem); font-weight: 200;
+    line-height: 1.1; letter-spacing: -0.025em;
+  }
+  .loomi-h3 {
+    font-family: var(--font-sora), sans-serif;
+    font-size: 1.5rem; font-weight: 300; line-height: 1.2; letter-spacing: -0.01em;
+  }
+  .loomi-body    { font-size: 1rem;     font-weight: 300; line-height: 1.6; }
+  .loomi-body-sm { font-size: 0.875rem; font-weight: 300; line-height: 1.6; }
+  .loomi-label {
+    font-size: 0.6875rem; font-weight: 400; line-height: 1;
+    letter-spacing: 0.3em; text-transform: uppercase;
+  }
+  .loomi-caption {
+    font-size: 0.6875rem; font-weight: 300; line-height: 1;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--muted-foreground);
+  }
+
+  /* Decorative radial glow (place behind hero content; never over text). */
+  .loomi-glow {
+    background:
+      radial-gradient(60% 60% at 20% 10%, rgba(123, 63, 255, 0.08), transparent 70%),
+      radial-gradient(50% 50% at 90% 0%, rgba(255, 45, 135, 0.06), transparent 70%);
+  }
+}
+
+/* ── Tailwind v4 theme — maps tokens to utilities ───────────────── */
 @theme inline {
   --color-background:           var(--background);
   --color-foreground:           var(--foreground);
@@ -100,18 +153,52 @@
   --color-accent:               var(--accent);
   --color-accent-foreground:    var(--accent-foreground);
   --color-destructive:          var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
   --color-border:               var(--border);
   --color-input:                var(--input);
   --color-ring:                 var(--ring);
-  /* Brand */
-  --color-brand-purple: #5b2dc4;
-  --color-brand-pink:   #ff3399;
-  --color-brand-dark:   #171717;
-  /* Fonts */
-  --font-display: var(--font-instrument), sans-serif;
-  --font-body:    var(--font-open-sans), sans-serif;
+
+  --color-sidebar:                     var(--sidebar);
+  --color-sidebar-foreground:          var(--sidebar-foreground);
+  --color-sidebar-primary:             var(--sidebar-primary);
+  --color-sidebar-primary-foreground:  var(--sidebar-primary-foreground);
+  --color-sidebar-accent:              var(--sidebar-accent);
+  --color-sidebar-accent-foreground:   var(--sidebar-accent-foreground);
+  --color-sidebar-border:              var(--sidebar-border);
+  --color-sidebar-ring:                var(--sidebar-ring);
+
+  /* ── Brand signals (use these for accents, gradients, status) ── */
+  --color-brand-purple:      #7B3FFF;
+  --color-brand-pink:        #FF2D87;
+  --color-brand-lilac:       #8B3FE0;   /* text-safe lilac */
+  --color-brand-lilac-soft:  #C47EFF;   /* gradient tails / decorative only */
+  --color-brand-dark:        #131313;
+
+  /* ── Grounds (named, for clarity) ── */
+  --color-canvas:   #F4F4F5;
+  --color-page:     #FAFAFA;
+  --color-surface:  #FFFFFF;
+
+  /* ── State signals (design-system extension for health/journey) ── */
+  --color-state-ok:         #1FAA6B;   /* verde — on track */
+  --color-state-attention:  #E0982E;   /* atenção — needs attention */
+  --color-state-blocked:    #E5484D;   /* impeditivo — blocked */
+
+  /* ── Fonts ── */
+  --font-sans:    var(--font-sora), sans-serif;
+  --font-display: var(--font-sora), sans-serif;
+  --font-heading: var(--font-sora), sans-serif;
+  --font-body:    var(--font-sora), sans-serif;
   --font-mono:    var(--font-jetbrains), monospace;
-  /* Animations */
+
+  /* ── Radius ── */
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   12px;
+  --radius-xl:   16px;
+  --radius-pill: 100px;
+
+  /* ── Motion ("Sem parar" — swift, purposeful) ── */
   @keyframes fade-up {
     from { opacity: 0; transform: translateY(16px); }
     to   { opacity: 1; transform: translateY(0); }
